@@ -9,12 +9,12 @@
 <body>
     <table>
         <tr>
-            <td>Ini adalah baris 1 kolom 1</td>
-            <td>Ini adalah baris 1 kolom 2</td>
+            <td>hello word</td>
+            <td></td>
         </tr>
         <tr>
-            <td>Ini adalah baris 2 kolom 1</td>
-            <td>Ini adalah baris 2 kolom 2</td>
+            <td></td>
+            <td></td>
         </tr>
     </table>
 
