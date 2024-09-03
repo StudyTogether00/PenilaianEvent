@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('Home');
+Route::get('/test', function () {
+    return 'testing metode post';
+});
+
+Route::post('/test', function () {
+    return 'test method post';
 });

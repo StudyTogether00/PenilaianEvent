@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PenggunaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/greeting', function () {
-    return 'Hello World';
-});
+Route::post("/test", [PenggunaController::class,"index"]);
+
+Route::post("/List", [PenggunaController::class,"lists"]);
