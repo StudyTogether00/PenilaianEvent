@@ -18,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::post("/test", [PenggunaController::class,"index"]);
 
 Route::post("/List", [PenggunaController::class,"lists"]);
+ 
+Route::prefix('Msseleksi')->group(function () {
+    Route::post("/List", [PenggunaController::class,"lists"]);
+    Route::post("/Save", [PenggunaController::class,"save"]);
+    Route::post("/Delete", [PenggunaController::class,"delete"]);
+});
