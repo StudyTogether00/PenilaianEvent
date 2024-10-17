@@ -1,28 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   @include('Layout.Head')
-  <meta charset="utf-8" />
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-    Aplikasi Seleksi
-  </title>
-  <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-  <!-- CSS Files -->
-  <link href="../assets/css/material-dashboard.css?v=2.2.2" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="../assets/demo/demo.css" rel="stylesheet" />
 </head>
-
-<body></body>
+<body>
   <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="black" data-image="../../../assets/img/sidebar-1.jpg">
+    <div class="sidebar" data-color="rose" data-background-color="black" data-image="assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -37,7 +20,7 @@
       <div class="sidebar-wrapper">
         <div class="user">
           <div class="photo">
-            <img src="../assets/img/faces/avatar.jpg" />
+            <img src="assets/img/faces/avatar.jpg" />
           </div>
           <div class="user-info">
             <a data-toggle="collapse" href="#collapseExample" class="username">
@@ -78,54 +61,54 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="../pages/datapengguna">
+            <a class="nav-link" data-toggle="collapse" href="pages/datapengguna">
               <i class="material-icons">image</i>
               <p> Data Pengguna
               </p>
             </a>
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="../pages/dataevent">
+            <a class="nav-link" data-toggle="collapse" href="pages/dataevent">
               <i class="material-icons">apps</i>
               <p> Data Event
               </p>
             </a>
           <li class="nav-item ">
-            <a class="nav-link" href="#../pages/datakriteria">
+            <a class="nav-link" href="pages/datakriteria">
               <i class="material-icons">content_paste</i>
               <p> Data Kriteria
               </p>
             </a>
           <li class="nav-item ">
-            <a class="nav-link" href="../pages/databobot">
+            <a class="nav-link" href="pages/databobot">
               <i class="material-icons">grid_on</i>
               <p> Data Bobot
               </p>
             </a>
           <li class="nav-item ">
-            <a class="nav-link" href="../pages/datapeserta">
+            <a class="nav-link" href="pages/datapeserta">
               <i class="material-icons">place</i>
               <p> Data Peserta
               </p>
             </a>
           <li class="nav-item ">
-            <a class="nav-link" href="../pages/datanilai">
+            <a class="nav-link" href="pages/datanilai">
               <i class="material-icons">widgets</i>
               <p> Data Nilai </p>
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="../pages/Normalisasi">
+            <a class="nav-link" href="Normalisasi">
               <i class="material-icons">timeline</i>
               <p> Normalisasi </p>
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="../pages/laporan">
+            <a class="nav-link" href="pages/laporan">
               <i class="material-icons">date_range</i>
               <p> Laporan </p>
             </a>
             <li class="nav-item ">
-            <a class="nav-link" href="../pages/ujicoba">
+            <a class="nav-link" href="pages/ujicoba">
               <i class="material-icons">content_paste</i>
               <p> Uji Coba</p>
             </a>

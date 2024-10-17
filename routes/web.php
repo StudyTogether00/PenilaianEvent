@@ -18,7 +18,7 @@ Route::get('/',function (){
     return view('pages/dashboard');
 });
 
-Route::get('/pages/Normalisasi',function (){
+Route::get('/Normalisasi',function (){
     return view('pages/Normalisasi');
 });
 Route::get('/pages/laporan',function (){
