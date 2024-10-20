@@ -21,27 +21,27 @@ Route::get('/',function (){
 Route::get('/Normalisasi',function (){
     return view('pages/Normalisasi');
 });
-Route::get('/pages/laporan',function (){
+Route::get('/laporan',function (){
     return view('pages/laporan');
 });
-Route::get('/pages/datanilai',function (){
+Route::get('/datanilai',function (){
     return view('pages/datanilai');
 });
-Route::get('/pages/datapeserta',function (){
+Route::get('/datapeserta',function (){
     return view('pages/datapeserta');
 });
-Route::get('/pages/databobot',function (){
+Route::get('/databobot',function (){
     return view('pages/databobot');
 });
-Route::get('/pages/datakriteria',function (){
+Route::get('/datakriteria',function (){
     return view('pages/datakriteria');
 });
-Route::get('/pages/dataevent',function (){
+Route::get('/dataevent',function (){
     return view('pages/dataevent');
 });
-Route::get('/pages/datapengguna',function (){
+Route::get('/datapengguna',function (){
     return view('pages/datapengguna');
 });
-Route::get('/pages/ujicoba',function (){
+Route::get('/ujicoba',function (){
     return view('pages/ujicoba');
 });
