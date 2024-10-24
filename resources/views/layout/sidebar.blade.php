@@ -48,7 +48,7 @@
         </div>
         <ul class="nav">
 
-            @php
+        @php
                 $currentUrl = Request::path();
                 function renderSubMenu($value, $currentUrl)
                 {
@@ -58,31 +58,77 @@
                     $currentLevel = $GLOBALS['sub_level'];
                     foreach ($value as $key => $menu) {
                         $GLOBALS['subparent_level'] = '';
-                        
-                        // Setting variable untuk sub_menu dan tidak
+
+                        // Setting variable untuk Sub sub_menu dan tidak
                         $url = !empty($menu['sub_menu'])
                             ? "data-toggle=\"collapse\" href=\"#{$GLOBALS['sub_level']}0{$key}\""
                             : "href=\"{$menu['url']}\"";
-                        $title = !empty($menu['sub_menu']) ? "‹b class=\"caret\"></b>" : '';
+                        $title = !empty($menu['sub_menu']) ? "<b class=\"caret\"></b>" : '';
                         $title = "<p>{$menu['title']}{$title}</p>";
 
-                        //sub sub menu
+                        // Sub Sub Menu
                         $subsubMenu = '';
                         if (!empty($menu['sub_menu'])) {
-                            $subsubMenu = "<div class=\"collapse\"id=\"{$GLOBALS['sub_level']}0{$key}\"><ul class>
+                            $subsubMenu = "<div class=\"collapse\" id=\"{$GLOBALS['sub_level']}0{$key}\"><ul class=\"nav\">";
                             $subsubMenu .= renderSubMenu($menu['sub_menu'], $currentUrl);
-                            $subsubMenu .= '</ul></div>'; 
+                            $subsubMenu .= '</ul></div>';
                         }
 
-                        // setting sub menu active
+                        // Setting Sub Menu Active
+                        $active = $currentUrl == $menu['url'] ? 'active' : '';
+                        if ($active == 'active') {
+                            $GLOBALS['parent_active'] = true;
+                            $GLOBALS['active'][$GLOBALS['sub_level'] - 1] = true;
+                        }
 
+                        $subMenu .= "<li class=\"nav-item {$active}\">
+                            <a class=\"nav-link\" {$url}>
+                                {$menu['icon']} {$title}
+                            </a>
+                            {$subsubMenu}
+                        </li>";
+                    }
+                    return $subMenu;
+                }
+
+                foreach (config('sidebar.menu') as $key => $value) {
+                    $GLOBALS['parent_active'] = '';
+                    // Setting variable untuk sub_menu dan tidak
+                    $url = !empty($value['sub_menu'])
+                        ? "data-toggle=\"collapse\" href=\"#{$key}\""
+                        : "href=\"{$value['url']}\"";
+                    $title = !empty($value['sub_menu']) ? "<b class=\"caret\"></b>" : '';
+                    $title = "<p>{$value['title']}{$title}</p>";
+
+                    // Sub Menu
+                    $subMenu = '';
+                    if (!empty($value['sub_menu'])) {
+                        $GLOBALS['sub_level'] = 0;
+                        $subMenu = "<div class=\"collapse\" id=\"{$key}\"><ul class=\"nav\">";
+                        $subMenu .= renderSubMenu($value['sub_menu'], $currentUrl);
+                        $subMenu .= '</ul></div>';
+                    }
+                    // Setting Menu Active
+                    $active = '';
+                    if (isset($value['url'])) {
+                        $active =
+                            $currentUrl == $value['url'] || ($value['url'] == '/' && $currentUrl == '/')
+                                ? 'active'
+                                : '';
+                    }
+                    $active = empty($active) && !empty($GLOBALS['parent_active']) ? 'active' : $active;
+
+                    // hasil yang ditampilkan
+                    $hsl = "<li class=\"nav-item {$active}\">
+                            <a class=\"nav-link\" {$url}>
+                                {$value['icon']} {$title}
+                            </a>
+                            {$subMenu}
+                        </li>";
+                    echo $hsl;
+                }
             @endphp
-          <li class="nav-item active ">
-            <a class="nav-link" href="/">
-              <i class="material-icons">dashboard</i>
-              <p> Dashboard </p>
-            </a>
-          </li>
+            
           <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="datapengguna">
               <i class="material-icons">image</i>
