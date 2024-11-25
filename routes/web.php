@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FE\RouteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,37 +12,34 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
+Route::get("/", [RouteController::class, "Dashboard"]);
 
-Route::get('/',function (){
-    return view('pages/dashboard');
-});
-
-Route::get('/Normalisasi',function (){
+Route::get('/Normalisasi', function () {
     return view('pages/Normalisasi');
 });
-Route::get('/laporan',function (){
+Route::get('/laporan', function () {
     return view('pages/laporan');
 });
-Route::get('/datanilai',function (){
+Route::get('/datanilai', function () {
     return view('pages/datanilai');
 });
-Route::get('/datapeserta',function (){
+Route::get('/datapeserta', function () {
     return view('pages/datapeserta');
 });
-Route::get('/databobot',function (){
+Route::get('/databobot', function () {
     return view('pages/databobot');
 });
-Route::get('/datakriteria',function (){
+Route::get('/datakriteria', function () {
     return view('pages/datakriteria');
 });
-Route::get('/dataevent',function (){
+Route::get('/dataevent', function () {
     return view('pages/dataevent');
 });
-Route::get('/datapengguna',function (){
+Route::get('/datapengguna', function () {
     return view('pages/datapengguna');
 });
-Route::get('/ujicoba',function (){
+Route::get('/ujicoba', function () {
     return view('pages/ujicoba');
 });
