@@ -5,7 +5,7 @@
     </div>
     <div class="sidebar-wrapper">
         <div class="user">
-            <div class="photo"><img src="assets/img/faces/novelia.jpeg" /></div>
+            <div class="photo"><img src="assets/img/faces/adit.jpeg" /></div>
             <div class="user-info">
                 <a data-toggle="collapse" href="#collapseExample" class="username">
                     <span>
@@ -119,42 +119,6 @@
                     echo $hsl;
                 }
             @endphp
-            {{-- <li class="nav-item active ">
-                <a class="nav-link" href="/">
-                    <i class="material-icons">dashboard</i>
-                    <p> Dashboard </p>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="../pages/Datajurusan">
-                    <i class="material-icons">image</i>
-                    <p> Data Jurusan </p>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="../pages/Datasiswa">
-                    <i class="material-icons">apps</i>
-                    <p> Data Siswa </p>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="../pages/Datamatapelajaran">
-                    <i class="material-icons">content_paste</i>
-                    <p> Data Matapelajaran </p>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="../pages/Databobot">
-                    <i class="material-icons">grid_on</i>
-                    <p> Data Bobot </p>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="../pages/Datanilaimatapelajaran">
-                    <i class="material-icons">place</i>
-                    <p> Data Nilai Matapelajaran </p>
-                </a>
-            </li>
             <li class="nav-item ">
                 <a class="nav-link" href="../pages/Normalisasi">
                     <i class="material-icons">widgets</i>
@@ -166,7 +130,7 @@
                     <i class="material-icons">timeline</i>
                     <p> laporan </p>
                 </a>
-            </li> --}}
+            </li>
         </ul>
     </div>
     <div class="sidebar-background"></div>
