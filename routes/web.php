@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FE\MasterDataController;
 use App\Http\Controllers\FE\RouteController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,31 +16,8 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get("/", [RouteController::class, "Dashboard"]);
-
-Route::get('/Normalisasi', function () {
-    return view('pages/Normalisasi');
-});
-Route::get('/laporan', function () {
-    return view('pages/laporan');
-});
-Route::get('/datanilai', function () {
-    return view('pages/datanilai');
-});
-Route::get('/datapeserta', function () {
-    return view('pages/datapeserta');
-});
-Route::get('/databobot', function () {
-    return view('pages/databobot');
-});
-Route::get('/datakriteria', function () {
-    return view('pages/datakriteria');
-});
-Route::get('/dataevent', function () {
-    return view('pages/dataevent');
-});
-Route::get('/datapengguna', function () {
-    return view('pages/datapengguna');
-});
-Route::get('/ujicoba', function () {
-    return view('pages/ujicoba');
+Route::prefix("MasterData")->group(function () {
+    Route::get("Event", [MasterDataController::class, "Event"]);
+    Route::get("Kriteria", [MasterDataController::class, "Kriteria"]);
+    Route::get("Bobot", [MasterDataController::class, "Bobot"]);
 });

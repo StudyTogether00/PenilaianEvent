@@ -11,20 +11,15 @@ class MasterDataController extends RouteController
         parent::__construct();
     }
 
-    public function Jurusan(Request $request)
+    public function Event(Request $request)
     {
-        $this->data["title"] = "Data Jurusan";
-        return view("pages.MasterData.Jurusan", $this->data);
+        $this->data["title"] = "Data Event";
+        return view("pages.MasterData.Event", $this->data);
     }
-    public function Siswa(Request $request)
+    public function Kriteria(Request $request)
     {
-        $this->data["title"] = "Data Siswa";
-        return view("pages.MasterData.Siswa", $this->data);
-    }
-    public function MataPelajaran(Request $request)
-    {
-        $this->data["title"] = "Data Mata Pelajaran";
-        return view("pages.MasterData.MataPelajaran", $this->data);
+        $this->data["title"] = "Data Kriteria";
+        return view("pages.MasterData.Kriteria", $this->data);
     }
     public function Bobot(Request $request)
     {
