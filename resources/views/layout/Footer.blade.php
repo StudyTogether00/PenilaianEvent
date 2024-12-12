@@ -99,6 +99,9 @@
             icon + "\"> </i></a>";
         return data;
     }
+    Dec0DataTable = $.fn.dataTable.render.number(',', '.', 0);
+    Dec2DataTable = $.fn.dataTable.render.number(',', '.', 2);
+
 
     function ShowModal(id, option = "") {
         option = option ? option : {
@@ -135,8 +138,14 @@
             },
             error: function(e) {
                 fc1();
-                console.info(e);
-                MessageNotif("Please, Check Your Connection!", "danger");
+                // console.info(e);
+                if (e.status == 500) {
+                    MessageNotif(e.responseJSON.message, "danger");
+                } else if (e.status == 400) {
+                    MessageNotif(e.responseJSON.message, "warning");
+                } else {
+                    MessageNotif("Please, Check Your Connection!", "danger");
+                }
             }
         });
     }
