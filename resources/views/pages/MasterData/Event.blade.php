@@ -19,18 +19,14 @@
                                 </tr>
                                 <tr>
                                     <th class="text-center align-middle" rowspan="2">No</th>
-                                    <th class="text-center align-middle" colspan="4">Event</th>
-                                    <th class="text-center align-middle" colspan="2">Register</th>
+                                    <th class="text-center align-middle" colspan="3">Event</th>
                                     <th class="text-center align-middle" rowspan="2">Status</th>
                                     <th class="disabled-sorting text-center align-middle" rowspan="2">Actions</th>
                                 </tr>
                                 <tr>
                                     <th class="text-center">Nama</th>
-                                    <th class="text-center">Mulai</th>
-                                    <th class="text-center">Selesai</th>
+                                    <th class="text-center">Tanggal</th>
                                     <th class="text-center">Kouta</th>
-                                    <th class="text-center">Mulai</th>
-                                    <th class="text-center">Selesai</th>
                                 </tr>
                             </thead>
                         </table>
@@ -44,8 +40,14 @@
     <x-modal-form id="AddEditData" title="labelAddEdit">
         <div class="modal-body">
             <div class="row">
-                <x-form-group class="col-sm-12 col-md-12" label="Kode Mata Pelajaran" name="kd_matapelajaran" required />
-                <x-form-group class="col-sm-12 col-md-12" label="Nama Mata Pelajaran" name="nama_matapelajaran" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Event" name="nm_event" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Tanggal" name="tgl_event" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Kouta" name="kuota" required />
+                <x-form-group type="select" class="col-sm-12 col-md-12" label="Status" name="flag_active" required>
+                    <option value="" disabled>--Choose Status--</option>
+                    <option value="1">Aktif</option>
+                    <option value="0">Non Aktif</option>
+                </x-form-group>
             </div>
         </div>
         <div class="modal-footer">
@@ -77,7 +79,7 @@
                 let dtu = {
                     id: id_tbl,
                     data: {
-                        url: $apiUrl + "MasterData/Mapel/List"
+                        url: $apiUrl + "MasterData/Event/List"
                     }
                 };
                 table = PDataTables(dtu, [{
@@ -87,18 +89,32 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 }, {
-                    "data": "kd_matapelajaran",
+                    "data": "nm_event",
                 }, {
-                    "data": "nama_matapelajaran",
+                    "data": "tgl_event",
+                    "className": "text-center",
+                    render: function(data, type, row, meta) {
+                        return Convertyyyymmmddd(data);
+                    }
+                }, {
+                    "data": "kuota",
+                    "className": "text-right",
+                    render: Dec0DataTable
+                }, {
+                    "data": "flag_active",
+                    "className": "text-right",
+                    render: function(data, type, row, meta) {
+                        return data == 1 ? "Aktif" : "Non Aktif";
+                    }
                 }, {
                     "data": null,
                     "orderable": false,
                     "className": "text-center",
                     render: function(data, type, row, meta) {
                         let html = "";
-                        html += btnDataTable("Edit Mapel", "btn-outline-primary edit",
+                        html += btnDataTable("Edit Event", "btn-outline-primary edit",
                             "fa fa-edit btn-outline-primary", true);
-                        html += btnDataTable("Delete Mapel", "btn-outline-danger delete",
+                        html += btnDataTable("Delete Event", "btn-outline-danger delete",
                             "fa fa-trash btn-outline-danger");
                         return html;
                     }
@@ -130,31 +146,38 @@
 
         ShowData = function(act = "Add", data = "") {
             let form_id = "#FAddEditData";
-            $("h4[labelAddEdit]").text(act + " Data Mata Pelajaran");
+            $("h4[labelAddEdit]").text(act + " Data Event");
             processData = {
                 action: act,
-                kd_matapelajaran: (act == "Add" ? "" : data.kd_matapelajaran),
-                nama_matapelajaran: (act == "Add" ? "" : data.nama_matapelajaran)
+                kd_event: (act == "Add" ? 0 : data.kd_event),
+                nm_event: (act == "Add" ? "" : data.nm_event),
+                tgl_event: (act == "Add" ? "" : data.tgl_event),
+                kuota: (act == "Add" ? 0 : data.kuota),
+                flag_active: (act == "Add" ? "" : data.flag_active),
             };
-            act == "Add" ? $(form_id + " [name='kd_matapelajaran']").removeAttr('disabled') : $(form_id +
-                " [name='kd_matapelajaran']").attr('disabled', true);
-            $(form_id + " [name='kd_matapelajaran']").val(processData.kd_matapelajaran).change();
-            $(form_id + " [name='nama_matapelajaran']").val(processData.nama_matapelajaran).change();
-
+            $(form_id + " [name='nm_event']").val(processData.nm_event).change();
+            $(form_id + " [name='tgl_event']").val(processData.tgl_event).change();
+            $(form_id + " [name='kuota']").val(processData.kuota).change();
+            $(form_id + " [name='flag_active']").val(processData.flag_active).change();
             $(form_id).parsley().reset();
             ShowModal("MAddEditData");
         }
 
-        function Save() {
+        Save = function() {
             let form_id = "#FAddEditData";
             if ($(form_id).parsley().validate()) {
                 Loader("show");
-                processData.kd_matapelajaran = $(form_id + " [name='kd_matapelajaran']").val();
-                processData.nama_matapelajaran = $(form_id + " [name='nama_matapelajaran']").val();
+                // Pass Data To Object
+                processData.nm_event = $(form_id + " [name='nm_event']").val();
+                processData.tgl_event = $(form_id + " [name='tgl_event']").val();
+                processData.kuota = $(form_id + " [name='kuota']").val();
+                processData.flag_active = $(form_id + " [name='flag_active']").val();
+                //Setup Send Ajax
                 let data = {
-                    url: $apiUrl + "MasterData/Mapel/Save",
+                    url: $apiUrl + "MasterData/Event/Save",
                     param: processData
                 };
+                // Process Ajax
                 SendAjax(data, function(result) {
                     MessageNotif(result.message, "success");
                     Refresh();
@@ -168,7 +191,7 @@
         Delete = function() {
             Loader("show");
             let data = {
-                url: $apiUrl + "MasterData/Mapel/Delete",
+                url: $apiUrl + "MasterData/Event/Delete",
                 param: processData
             };
             SendAjax(data, function(result) {
@@ -181,7 +204,7 @@
         }
 
         $(document).ready(function() {
-            // Refresh();
+            Refresh();
         });
     </script>
 @endpush

@@ -102,14 +102,30 @@
     Dec0DataTable = $.fn.dataTable.render.number(',', '.', 0);
     Dec2DataTable = $.fn.dataTable.render.number(',', '.', 2);
 
+    Convertyyyymmmddd = function(data) {
+        if (data == "" || data == null || data == undefined) {
+            return "";
+        } else {
+            var dd = data.substr(8, 2);
+            var mm = data.substr(5, 2);
+            var yyyy = data.substr(0, 4);
+            return yyyy + "-" + mm + "-" + dd;
+        }
+    }
 
-    function ShowModal(id, option = "") {
+    function ShowModal(id, option = "", scroll = false) {
         option = option ? option : {
             backdrop: 'static',
             keyboard: false
         };
         var md = $("#" + id);
-        $("#" + id).modal(option);
+        if (scroll) {
+            md = md.on('hidden.bs.modal', function(event) {
+                $('body').addClass('modal-open');
+            }).modal(option);
+        } else {
+            md.modal(option);
+        }
     }
 
     SendAjax = function(data, fc, fc1 = function() {}) {
