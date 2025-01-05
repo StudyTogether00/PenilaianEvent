@@ -10,6 +10,10 @@ class BaseService
     }
     public static function ResponseError($message = "", $data = "", $status = 200)
     {
+        if ($status == 23000) {
+            $status = 400;
+            $message = "Can't Delete Data!";
+        }
         return self::ResponseJson($message, $data, false, $status);
     }
     public static function ResponseJson($message = "", $data = "", $stt = true, $status = 200)
