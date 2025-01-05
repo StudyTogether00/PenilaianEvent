@@ -153,10 +153,9 @@
                     $tr = $(this).closest('tr');
                     var data = table.row($tr).data();
                     processData = {
-                        kd_kriteria: data.kd_kriteria
+                        kd_event: data.kd_event
                     };
-                    $("#FDelData p").html("Are you sure to delete data code Mata Pelajaran <b>" + data
-                        .kd_kriteria +
+                    $("#FDelData p").html("Are you sure to delete data setup Bobot <b>" + data.nm_event +
                         "</b> ?");
                     ShowModal("MDelData");
                 });
