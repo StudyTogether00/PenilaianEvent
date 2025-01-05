@@ -102,7 +102,6 @@
                     render: Dec0DataTable
                 }, {
                     "data": "flag_active",
-                    "className": "text-right",
                     render: function(data, type, row, meta) {
                         return data == 1 ? "Aktif" : "Non Aktif";
                     }

@@ -21,25 +21,25 @@ class MstKriteriaService
         return $data;
     }
 
-    public static function Detail($kd, $flag_active = 1, $action = "Edit")
+    public static function Detail($kd_kriteria, $flag_active = 1, $action = "Edit")
     {
-        $data = self::Data($flag_active)->find($kd);
+        $data = self::Data($flag_active)->find($kd_kriteria);
         if ($action == "Add") {
-            if (!empty($data->kd)) {
-                throw new \Exception(BaseService::MessageDataExists("Kode Kriteria {$kd}"), 400);
+            if (!empty($data->kd_kriteria)) {
+                throw new \Exception(BaseService::MessageDataExists("Kode Kriteria {$kd_kriteria}"), 400);
             }
         } else {
-            if (empty($data->kd)) {
-                throw new \Exception(BaseService::MessageNotFound("Kode Kriteria {$kd}"), 400);
+            if (empty($data->kd_kriteria)) {
+                throw new \Exception(BaseService::MessageNotFound("Kode Kriteria {$kd_kriteria}"), 400);
             }
         }
         return $data;
     }
 
-    public static function Join($data, $kd, $alias = "mstkriteria", $type = "join")
+    public static function Join($data, $kd_kriteria, $alias = "mstkriteria", $type = "join")
     {
-        $data = $data->{$type}(with(new MstKriteria())->getTable() . " AS {$alias}", function ($q) use ($alias, $kd) {
-            $q->on("{$alias}.kd", "=", $kd);
+        $data = $data->{$type}(with(new MstKriteria())->getTable() . " AS {$alias}", function ($q) use ($alias, $kd_kriteria) {
+            $q->on("{$alias}.kd_kriteria", "=", $kd_kriteria);
         });
         return $data;
     }

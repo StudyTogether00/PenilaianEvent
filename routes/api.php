@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\BE\MstData\KriteriaController;
 use App\Http\Controllers\BE\MstData\MstEventController;
+use App\Http\Controllers\BE\MstData\MstKriteriaController;
 use App\Http\Controllers\PenggunaController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +23,14 @@ Route::prefix('MasterData')->group(function () {
         Route::post('Delete', [MstEventController::class, "Delete"]);
     });
     Route::prefix('Kriteria')->group(function () {
-        Route::post('List', [KriteriaController::class, "Lists"]);
-        Route::post('Save', [KriteriaController::class, "Save"]);
-        Route::post('Delete', [KriteriaController::class, "Delete"]);
+        Route::post('List', [MstKriteriaController::class, "Lists"]);
+        Route::post('Save', [MstKriteriaController::class, "Save"]);
+        Route::post('Delete', [MstKriteriaController::class, "Delete"]);
+    });
+    Route::prefix('Bobot')->group(function () {
+        Route::post('List', [MstKriteriaController::class, "Lists"]);
+        Route::post('Save', [MstKriteriaController::class, "Save"]);
+        Route::post('Delete', [MstKriteriaController::class, "Delete"]);
     });
 });
 

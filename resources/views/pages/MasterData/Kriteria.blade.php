@@ -18,10 +18,11 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="text-center align-middle" rowspan="1">No</th>
-                                    <th class="text-center align-middle" rowspan="2">Kriteria</th>
-                                    <th class="text-center align-middle" rowspan="3">Tipe</th>
-                                    <th class="disabled-sorting text-center align-middle" rowspan="2">Actions</th>
+                                    <th class="text-center">No</th>
+                                    <th class="text-center">Kriteria</th>
+                                    <th class="text-center">Tipe</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="disabled-sorting text-center">Actions</th>
                                 </tr>
                             </thead>
                         </table>
@@ -35,12 +36,16 @@
     <x-modal-form id="AddEditData" title="labelAddEdit">
         <div class="modal-body">
             <div class="row">
-                <x-form-group class="col-sm-12 col-md-12" label="Kode Kriteria" name="kd" required />
-                <x-form-group class="col-sm-12 col-md-12" label="Kriteria" name="kriteria" required />
-                <x-form-group type="select" class="col-sm-12 col-md-12" label="Tipe" name="flag_active" required>
-                    <option value="" disabled>--Choose Status--</option>
+                <x-form-group class="col-sm-12 col-md-12" label="Kriteria" name="nm_kriteria" required />
+                <x-form-group type="select" class="col-sm-12 col-md-12" label="Tipe" name="tipe" required>
+                    <option value="" disabled>--Choose Tipe--</option>
                     <option value="1">Benefit</option>
                     <option value="0">Cost</option>
+                </x-form-group>
+                <x-form-group type="select" class="col-sm-12 col-md-12" label="Status" name="flag_active" required>
+                    <option value="" disabled>--Choose Status--</option>
+                    <option value="1">Aktif</option>
+                    <option value="0">Non Aktif</option>
                 </x-form-group>
             </div>
         </div>
@@ -83,15 +88,17 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 }, {
-                    "data": "kode",
+                    "data": "nm_kriteria",
                 }, {
-                    "data": "kriteria",
-                }, {
-                    "data": "flag_active",
-                    "className": "text-right",
+                    "data": "tipe",
                     render: function(data, type, row, meta) {
                         return data == 1 ? "Benefit" : "Cost";
-                    }               
+                    }
+                }, {
+                    "data": "flag_active",
+                    render: function(data, type, row, meta) {
+                        return data == 1 ? "Aktif" : "Non Aktif";
+                    }
                 }, {
                     "data": null,
                     "orderable": false,
@@ -114,10 +121,10 @@
                     $tr = $(this).closest('tr');
                     var data = table.row($tr).data();
                     processData = {
-                        kd: data.kd
+                        kd_kriteria: data.kd_kriteria,
+                        nm_kriteria: data.nm_kriteria
                     };
-                    $("#FDelData p").html("Are you sure to delete data kriteria <b>" + data
-                        .kd +
+                    $("#FDelData p").html("Are you sure to delete data Kriteria <b>" + data.nm_kriteria +
                         "</b> ?");
                     ShowModal("MDelData");
                 });
@@ -135,12 +142,13 @@
             $("h4[labelAddEdit]").text(act + " Data Kriteria");
             processData = {
                 action: act,
-                kd: (act == "Add" ? "" : data.kd),
-                kriteria: (act == "Add" ? "" : data.kriteria),
+                kd_kriteria: (act == "Add" ? 0 : data.kd_kriteria),
+                nm_kriteria: (act == "Add" ? "" : data.nm_kriteria),
+                tipe: (act == "Add" ? "" : data.tipe),
                 flag_active: (act == "Add" ? "" : data.flag_active),
             };
-            $(form_id + " [name='kd']").val(processData.kd).change();
-            $(form_id + " [name='kriteria']").val(processData.kriteria).change();
+            $(form_id + " [name='nm_kriteria']").val(processData.nm_kriteria).change();
+            $(form_id + " [name='tipe']").val(processData.tipe).change();
             $(form_id + " [name='flag_active']").val(processData.flag_active).change();
             $(form_id).parsley().reset();
             ShowModal("MAddEditData");
@@ -151,8 +159,8 @@
             if ($(form_id).parsley().validate()) {
                 Loader("show");
                 // Pass Data To Object
-                processData.kd = $(form_id + " [name='kd']").val();
-                processData.kriteria = $(form_id + " [name='kriteria']").val();
+                processData.nm_kriteria = $(form_id + " [name='nm_kriteria']").val();
+                processData.tipe = $(form_id + " [name='tipe']").val();
                 processData.flag_active = $(form_id + " [name='flag_active']").val();
                 //Setup Send Ajax
                 let data = {
@@ -185,7 +193,7 @@
         }
 
         $(document).ready(function() {
-             Refresh();
+            Refresh();
         });
     </script>
 @endpush

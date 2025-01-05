@@ -10,9 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class MstEventController extends BaseController
+class MstBobotController extends BaseController
 {
-    protected $pns = "Data Master Event";
+    protected $pns = "Data Bobot";
     public function __construct()
     {
         parent::__construct();
@@ -91,7 +91,7 @@ class MstEventController extends BaseController
             }
 
             // Delete
-            $data = MstEventService::Detail($request->kd_event, null);
+            $data = MstEventService::Detail($request->kd_event);
             $data->delete();
 
             DB::commit();
