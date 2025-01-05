@@ -35,8 +35,9 @@
     <x-modal-form id="AddEditData" title="labelAddEdit">
         <div class="modal-body">
             <div class="row">
-                <x-form-group class="col-sm-12 col-md-12" label="Kode Mata Pelajaran" name="kd_matapelajaran" required />
-                <x-form-group class="col-sm-12 col-md-12" label="Nama Mata Pelajaran" name="nama_matapelajaran" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Kode Kriteria" name="kd" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Kriteria" name="kriteria" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Tipe" name="tipe" required />
             </div>
         </div>
         <div class="modal-footer">
@@ -78,9 +79,11 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 }, {
-                    "data": "kd_matapelajaran",
+                    "data": "kd",
                 }, {
-                    "data": "nama_matapelajaran",
+                    "data": "kriteria",
+                }, {
+                    "data": "kriteria",
                 }, {
                     "data": null,
                     "orderable": false,
@@ -103,10 +106,10 @@
                     $tr = $(this).closest('tr');
                     var data = table.row($tr).data();
                     processData = {
-                        kd_matapelajaran: data.kd_matapelajaran
+                        kd: data.kd
                     };
                     $("#FDelData p").html("Are you sure to delete data code Mata Pelajaran <b>" + data
-                        .kd_matapelajaran +
+                        .kd +
                         "</b> ?");
                     ShowModal("MDelData");
                 });
@@ -121,16 +124,17 @@
 
         ShowData = function(act = "Add", data = "") {
             let form_id = "#FAddEditData";
-            $("h4[labelAddEdit]").text(act + " Data Mata Pelajaran");
+            $("h4[labelAddEdit]").text(act + " Data Kriteria");
             processData = {
                 action: act,
-                kd_matapelajaran: (act == "Add" ? "" : data.kd_matapelajaran),
-                nama_matapelajaran: (act == "Add" ? "" : data.nama_matapelajaran)
+                kd: (act == "Add" ? "" : data.kd),
+                kriteria: (act == "Add" ? "" : data.kriteria)
             };
-            act == "Add" ? $(form_id + " [name='kd_matapelajaran']").removeAttr('disabled') : $(form_id +
-                " [name='kd_matapelajaran']").attr('disabled', true);
-            $(form_id + " [name='kd_matapelajaran']").val(processData.kd_matapelajaran).change();
-            $(form_id + " [name='nama_matapelajaran']").val(processData.nama_matapelajaran).change();
+            act == "Add" ? $(form_id + " [name='kd']").removeAttr('disabled') : $(form_id +
+                " [name='kd']").attr('disabled', true);
+            $(form_id + " [name='kd']").val(processData.kd).change();
+            $(form_id + " [name='kriteria']").val(processData.kriteria).change();
+            $(form_id + " [name='tipe']").val(processData.tipe).change();
 
             $(form_id).parsley().reset();
             ShowModal("MAddEditData");
@@ -140,8 +144,8 @@
             let form_id = "#FAddEditData";
             if ($(form_id).parsley().validate()) {
                 Loader("show");
-                processData.kd_matapelajaran = $(form_id + " [name='kd_matapelajaran']").val();
-                processData.nama_matapelajaran = $(form_id + " [name='nama_matapelajaran']").val();
+                processData.kd = $(form_id + " [name='kd']").val();
+                processData.kriteria = $(form_id + " [name='kriteria']").val();
                 let data = {
                     url: $apiUrl + "MasterData/Mapel/Save",
                     param: processData
