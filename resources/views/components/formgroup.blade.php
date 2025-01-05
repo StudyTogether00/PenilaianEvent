@@ -6,6 +6,8 @@
         <label class="{{ $classlabel }}">{{ $label }}</label>
         @if ($type == 'text' || $type == 'password')
             <input type="{{ $type }}" class="form-control" {{ $attributes }}> {{-- placeholder="{{ $label }}" --}}
+        @elseif ($type == 'date')
+            <input type="text" class="form-control datepicker" {{ $attributes }}>
         @elseif ($type == 'select')
             <select class="form-control selectpicker" {{ $attributes }} data-style="select-with-transition">
                 {{ $slot }}

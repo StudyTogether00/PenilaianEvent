@@ -41,7 +41,7 @@
         <div class="modal-body">
             <div class="row">
                 <x-form-group class="col-sm-12 col-md-12" label="Event" name="nm_event" required />
-                <x-form-group class="col-sm-12 col-md-12" label="Tanggal" name="tgl_event" required />
+                <x-form-group type="date" class="col-sm-12 col-md-12" label="Tanggal" name="tgl_event" required />
                 <x-form-group class="col-sm-12 col-md-12" label="Kouta" name="kuota" required />
                 <x-form-group type="select" class="col-sm-12 col-md-12" label="Status" name="flag_active" required>
                     <option value="" disabled>--Choose Status--</option>
@@ -128,11 +128,10 @@
                     $tr = $(this).closest('tr');
                     var data = table.row($tr).data();
                     processData = {
-                        kd_matapelajaran: data.kd_matapelajaran
+                        kd_event: data.kd_event,
+                        nm_event: data.nm_event
                     };
-                    $("#FDelData p").html("Are you sure to delete data code Mata Pelajaran <b>" + data
-                        .kd_matapelajaran +
-                        "</b> ?");
+                    $("#FDelData p").html("Are you sure to delete data Event <b>" + data.nm_event + "</b> ?");
                     ShowModal("MDelData");
                 });
             } else {
@@ -151,7 +150,7 @@
                 action: act,
                 kd_event: (act == "Add" ? 0 : data.kd_event),
                 nm_event: (act == "Add" ? "" : data.nm_event),
-                tgl_event: (act == "Add" ? "" : data.tgl_event),
+                tgl_event: (act == "Add" ? moment(new Date()).format("YYYY-MM-DD") : data.tgl_event),
                 kuota: (act == "Add" ? 0 : data.kuota),
                 flag_active: (act == "Add" ? "" : data.flag_active),
             };
@@ -205,6 +204,7 @@
 
         $(document).ready(function() {
             Refresh();
+            LoadPicker();
         });
     </script>
 @endpush
