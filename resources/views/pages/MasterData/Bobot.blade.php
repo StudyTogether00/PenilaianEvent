@@ -139,8 +139,10 @@
                         let html = "";
                         html += btnDataTable("Edit Bobot", "btn-outline-primary edit",
                             "fa fa-edit btn-outline-primary", true);
-                        html += btnDataTable("Delete Bobot", "btn-outline-danger delete",
-                            "fa fa-trash btn-outline-danger");
+                        if (data.setup > 0) {
+                            html += btnDataTable("Delete Bobot", "btn-outline-danger delete",
+                                "fa fa-trash btn-outline-danger");
+                        }
                         return html;
                     }
                 }]);
