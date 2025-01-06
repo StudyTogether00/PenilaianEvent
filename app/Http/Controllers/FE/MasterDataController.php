@@ -26,4 +26,14 @@ class MasterDataController extends RouteController
         $this->data["title"] = "Data Bobot";
         return view("pages.MasterData.Bobot", $this->data);
     }
+    public function Peserta(Request $request)
+    {
+        $this->data["title"] = "Data Peserta";
+        return view("pages.MasterData.Peserta", $this->data);
+    }
+    public function Nilai(Request $request)
+    {
+        $this->data["title"] = "Data Nilai";
+        return view("pages.MasterData.Nilai", $this->data);
+    }
 }

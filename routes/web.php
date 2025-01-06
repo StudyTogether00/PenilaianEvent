@@ -20,4 +20,6 @@ Route::prefix("MasterData")->group(function () {
     Route::get("Event", [MasterDataController::class, "Event"]);
     Route::get("Kriteria", [MasterDataController::class, "Kriteria"]);
     Route::get("Bobot", [MasterDataController::class, "Bobot"]);
+    Route::get("Peserta", [MasterDataController::class, "Peserta"]);
+    Route::get("Nilai", [MasterDataController::class, "Nilai"]);
 });
