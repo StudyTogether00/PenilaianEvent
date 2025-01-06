@@ -35,6 +35,20 @@ Route::prefix('MasterData')->group(function () {
         Route::post('Save', [MstBobotController::class, "Save"]);
         Route::post('Delete', [MstBobotController::class, "Delete"]);
     });
+    Route::prefix('Peserta')->group(function () {
+        Route::post('List', [MstPesertaController::class, "Lists"]);
+        Route::post('DataBobot', [MstPesertaController::class, "DataBobot"]);
+        Route::post('KriteriaReady', [MstPesertaController::class, "KriteriaReady"]);
+        Route::post('Save', [MstPesertaController::class, "Save"]);
+        Route::post('Delete', [MstPesertaController::class, "Delete"]);
+    });
+    Route::prefix('Nilai')->group(function () {
+        Route::post('List', [MstNilaiController::class, "Lists"]);
+        Route::post('DataBobot', [MstNilaiController::class, "DataBobot"]);
+        Route::post('KriteriaReady', [MstNilaiController::class, "KriteriaReady"]);
+        Route::post('Save', [MstNilaiController::class, "Save"]);
+        Route::post('Delete', [MstNilaiController::class, "Delete"]);
+    });
 });
 
 Route::post("/test", [PenggunaController::class, "index"]);
