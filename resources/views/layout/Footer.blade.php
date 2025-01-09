@@ -154,16 +154,17 @@
         var method = data.method ? data.method : "POST";
         var dataType = data.dataType ? data.dataType : "jsonp";
         var param = data.param ? data.param : {};
+        var headers = data.headers ? data.headers : {
+            // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBWZXIiOiIwLjAuMCIsImV4cCI6NDcyNjM4OTEyMiwibG9jYWxlIjoiIiwibWFzdGVyVmVyIjoiIiwicGxhdGZvcm0iOiIiLCJwbGF0Zm9ybVZlciI6IiIsInVzZXJJZCI6IiJ9.QIZbmB5_9Xlap_gDhjETfMI6EAmR15yBtIQkWFWJkrg',
+            // 'Content-Type': 'application/json'
+        }
 
         $.ajax({
             type: method,
             // dataType: dataType,
             url: url,
             data: param,
-            // headers: {
-            //     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBWZXIiOiIwLjAuMCIsImV4cCI6NDcyNjM4OTEyMiwibG9jYWxlIjoiIiwibWFzdGVyVmVyIjoiIiwicGxhdGZvcm0iOiIiLCJwbGF0Zm9ybVZlciI6IiIsInVzZXJJZCI6IiJ9.QIZbmB5_9Xlap_gDhjETfMI6EAmR15yBtIQkWFWJkrg',
-            //     'Content-Type': 'application/json'
-            // },
+            headers: headers,
             success: function(data, status, xhr) {
                 let result = data;
                 fc1();
@@ -184,6 +185,21 @@
                     MessageNotif("Please, Check Your Connection!", "danger");
                 }
             }
+        });
+    }
+
+    Logout = function() {
+        let data = {
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "DestroySession",
+        };
+        SendAjax(data, function(result) {
+            MessageNotif(result.message, "success");
+            window.location.reload(true);
+        }, function() {
+            Loader();
         });
     }
 

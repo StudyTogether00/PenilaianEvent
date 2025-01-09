@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get("/", [RouteController::class, "Dashboard"]);
-Route::prefix("MasterData")->group(function () {
+Route::get("/", [RouteController::class, "Dashboard"])->middleware("websession");
+Route::get("/Login", [RouteController::class, "Login"]);
+Route::post("SignIn", [RouteController::class, "SignIn"]);
+Route::post("DestroySession", [RouteController::class, "DestroySession"]);
+Route::prefix("MasterData")->middleware("websession")->group(function () {
     Route::get("Event", [MasterDataController::class, "Event"]);
     Route::get("Kriteria", [MasterDataController::class, "Kriteria"]);
     Route::get("Bobot", [MasterDataController::class, "Bobot"]);
