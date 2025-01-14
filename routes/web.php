@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\FE\MasterDataController;
+use App\Http\Controllers\FE\ProcessController;
+use App\Http\Controllers\FE\ReportController;
 use App\Http\Controllers\FE\RouteController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +27,11 @@ Route::prefix("MasterData")->middleware("websession")->group(function () {
     Route::get("Bobot", [MasterDataController::class, "Bobot"]);
     Route::get("Peserta", [MasterDataController::class, "Peserta"]);
     Route::get("Nilai", [MasterDataController::class, "Nilai"]);
+});
+Route::prefix("Process")->middleware("websession")->group(function () {
+    Route::get("Register", [ProcessController::class, "Register"]);
+    Route::get("Nilai", [ProcessController::class, "Nilai"]);
+});
+Route::prefix("Report")->middleware("websession")->group(function () {
+    Route::get("Normalisasi", [ReportController::class, "Normalisasi"]);
 });

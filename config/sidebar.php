@@ -29,12 +29,32 @@ return [
                     "title" => "Data Peserta",
                     "url" => "MasterData/Peserta",
                 ],
+            ],
+        ], [
+            "icon" => '<i class="material-icons">content_copy</i>',
+            "title" => "Proses",
+            "sub_menu" => [
                 [
-                    "icon" => '<span class="sidebar-mini">DN</span>',
-                    "title" => "Data Nilai",
-                    "url" => "MasterData/MstUser",
-                ]
-            ]
-        ]
+                    "icon" => '<span class="sidebar-mini">DE</span>',
+                    "title" => "Register Peserta",
+                    "url" => "Process/Register",
+                ],
+                [
+                    "icon" => '<span class="sidebar-mini">Dk</span>',
+                    "title" => "Penilaian",
+                    "url" => "Process/Nilai",
+                ],
+            ],
+        ], [
+            "icon" => '<i class="material-icons">content_copy</i>',
+            "title" => "Laporan",
+            "sub_menu" => [
+                [
+                    "icon" => '<span class="sidebar-mini">DE</span>',
+                    "title" => "Normalisasi",
+                    "url" => "Report/Normalisasi",
+                ],
+            ],
+        ],
     ],
 ];
