@@ -3,7 +3,7 @@
 use App\Http\Controllers\BE\MstData\MstBobotController;
 use App\Http\Controllers\BE\MstData\MstEventController;
 use App\Http\Controllers\BE\MstData\MstKriteriaController;
-use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\BE\MstData\MstPesertaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,26 +37,19 @@ Route::prefix('MasterData')->group(function () {
     });
     Route::prefix('Peserta')->group(function () {
         Route::post('List', [MstPesertaController::class, "Lists"]);
-        Route::post('DataBobot', [MstPesertaController::class, "DataBobot"]);
-        Route::post('KriteriaReady', [MstPesertaController::class, "KriteriaReady"]);
+        Route::post('Save', [MstPesertaController::class, "Save"]);
+        Route::post('Delete', [MstPesertaController::class, "Delete"]);
+    });
+});
+Route::prefix('Process')->group(function () {
+    Route::prefix('RegisterAdmin')->group(function () {
+        Route::post('List', [MstPesertaController::class, "Lists"]);
         Route::post('Save', [MstPesertaController::class, "Save"]);
         Route::post('Delete', [MstPesertaController::class, "Delete"]);
     });
     Route::prefix('Nilai')->group(function () {
-        Route::post('List', [MstNilaiController::class, "Lists"]);
-        Route::post('DataBobot', [MstNilaiController::class, "DataBobot"]);
-        Route::post('KriteriaReady', [MstNilaiController::class, "KriteriaReady"]);
-        Route::post('Save', [MstNilaiController::class, "Save"]);
-        Route::post('Delete', [MstNilaiController::class, "Delete"]);
+        Route::post('List', [MstPesertaController::class, "Lists"]);
+        Route::post('Save', [MstPesertaController::class, "Save"]);
+        Route::post('Delete', [MstPesertaController::class, "Delete"]);
     });
-});
-
-Route::post("/test", [PenggunaController::class, "index"]);
-
-Route::post("/List", [PenggunaController::class, "lists"]);
-
-Route::prefix('Msseleksi')->group(function () {
-    Route::post("/List", [PenggunaController::class, "lists"]);
-    Route::post("/Save", [PenggunaController::class, "save"]);
-    Route::post("/Delete", [PenggunaController::class, "delete"]);
 });
