@@ -26,7 +26,7 @@
                                 <tr>
                                     <th class="text-center">Nama</th>
                                     <th class="text-center">Tanggal</th>
-                                    <th class="text-center">Kouta</th>
+                                    <th class="text-center">Kuota</th>
                                 </tr>
                             </thead>
                         </table>
