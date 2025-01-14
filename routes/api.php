@@ -42,7 +42,7 @@ Route::prefix('MasterData')->group(function () {
     });
 });
 Route::prefix('Process')->group(function () {
-    Route::prefix('RegisterAdmin')->group(function () {
+    Route::prefix('Register')->group(function () {
         Route::post('List', [MstPesertaController::class, "Lists"]);
         Route::post('Save', [MstPesertaController::class, "Save"]);
         Route::post('Delete', [MstPesertaController::class, "Delete"]);

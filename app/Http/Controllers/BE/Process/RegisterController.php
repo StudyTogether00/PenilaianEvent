@@ -4,7 +4,9 @@ namespace App\Http\Controllers\BE\Process;
 
 use App\Http\Controllers\BE\BaseController;
 use App\Services\BaseService;
+use App\Services\DB\MstEventService;
 use App\Services\DB\MstPesertaService;
+use App\Services\DB\RegisterService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends BaseController
 {
-    protected $pns = "Data Master Peserta";
+    protected $pns = "Data Register";
     public function __construct()
     {
         parent::__construct();
@@ -21,12 +23,15 @@ class RegisterController extends BaseController
     public function Lists(Request $request)
     {
         try {
-            $data = MstPesertaService::Data(null);
-            $data = $data->select(
-                "kd_peserta", "nm_peserta", "jns_kel", "tgl_lhr", "alamat",
-                "email", "username", "password", "flag_active"
-            );
-            $data = $data->orderBy("nm_peserta")->get();
+            $data = [];
+            if (!empty($request->kd_event)) {
+                $data = RegisterService::Data($request->kd_event);
+                $data = $data->select(
+                    "registerevent.kd_event", "e.nm_event", "registerevent.kd_peserta", "p.nm_peserta",
+                    "registerevent.no_event", "registerevent.tgl_register", "p.jns_kel", "p.email", "p.tgl_lhr"
+                );
+                $data = $data->orderBy("p.nm_peserta")->get();
+            }
 
             $this->respon = BaseService::ResponseSuccess(BaseService::MsgSuccess($this->pns, 1), $data);
         } catch (\Throwable $th) {
@@ -41,46 +46,31 @@ class RegisterController extends BaseController
             DB::beginTransaction();
             $validation = Validator::make($request->all(), [
                 "action" => "required|in:{$this->option_action}",
-                "kd_peserta" => "required_if:action,Edit|nullable",
-                "nm_peserta" => "required",
-                "jns_kel" => "required|boolean",
-                "tgl_lhr" => "required|date",
-                "alamat" => "required",
-                "email" => "required",
-                "username" => "required",
-                "password" => "required",
-                "flag_active" => "required|boolean",
+                "kd_event" => "required",
+                "kd_peserta" => "required",
+                "tgl_register" => "required|date",
+                "no_event" => "required",
             ]);
             if ($validation->fails()) {
                 $this->error = $validation->errors();
                 throw new \Exception(BaseService::MessageCheckData(), 400);
             }
-            if ($request->action == "Add") {
-                $request->kd_peserta = 0;
-            }
 
-            // Check Data Username
-            $cek = MstPesertaService::Data(null)->where("username", $request->username)->where("kd_peserta", "<>", $request->kd_peserta)->count();
-            if ($cek > 0) {
-                throw new \Exception(BaseService::MessageDataExists("Username {$request->username}"), 400);
-            }
+            // Check Data event
+            $dtevent = MstEventService::Detail($request->kd_event);
+            // Check Data Peserta
+            $dtpeserta = MstPesertaService::Detail($request->kd_peserta);
 
             // Save Or Update
-            $data = MstPesertaService::Detail($request->kd_peserta, null, $request->action);
+            $data = RegisterService::Detail($request->kd_event, $request->kd_peserta, $request->action);
             if ($request->action == "Add") {
-                $data = MstPesertaService::new ();
+                $data = RegisterService::new ();
+                $data->kd_event = $request->kd_event;
+                $data->kd_peserta = $request->kd_peserta;
                 $data->created_at = Carbon::now();
-                $data->username = $request->username;
             }
-            $data->nm_peserta = $request->nm_peserta;
-            $data->jns_kel = $request->jns_kel;
-            $data->tgl_lhr = $request->tgl_lhr;
-            $data->alamat = $request->alamat;
-            $data->email = $request->email;
-            if ($data->password != $request->password && !empty($request->password)) {
-                $data->password = md5($request->password);
-            }
-            $data->flag_active = $request->flag_active;
+            $data->no_event = $request->no_event;
+            $data->tgl_register = $request->tgl_register;
             $data->updated_at = Carbon::now();
             $data->save();
 
@@ -97,14 +87,14 @@ class RegisterController extends BaseController
     {
         try {
             DB::beginTransaction();
-            $validation = Validator::make($request->all(), ["kd_peserta" => "required"]);
+            $validation = Validator::make($request->all(), ["kd_event" => "required", "kd_peserta" => "required"]);
             if ($validation->fails()) {
                 $this->error = $validation->errors();
                 throw new \Exception(BaseService::MessageCheckData(), 400);
             }
 
             // Delete
-            $data = MstPesertaService::Detail($request->kd_peserta, null);
+            $data = RegisterService::Detail($request->kd_event, $request->kd_peserta);
             $data->delete();
 
             DB::commit();
