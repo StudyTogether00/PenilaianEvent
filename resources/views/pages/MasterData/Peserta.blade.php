@@ -40,17 +40,21 @@
     <x-modal-form id="AddEditData" title="labelAddEdit">
         <div class="modal-body">
             <div class="row">
-                <x-form-group class="col-sm-12 col-md-12" label="Kode" name="kd_peserta" required />
                 <x-form-group class="col-sm-12 col-md-12" label="Nama Peserta" name="nm_peserta" required />
+                <x-form-group type="select" class="col-sm-12 col-md-12" label="Status" name="jns_kel" required>
+                    <option value="" disabled>--Choose JK--</option>
+                    <option value="1">Laki-Laki</option>
+                    <option value="0">Perempuan</option>
+                </x-form-group>
                 <x-form-group type="date" class="col-sm-12 col-md-12" label="Tanggal Lahir" name="tgl_lhr" required />
                 <x-form-group class="col-sm-12 col-md-12" label="Alamat" name="alamat" required />
                 <x-form-group class="col-sm-12 col-md-12" label="Email" name="email" required />
                 <x-form-group class="col-sm-12 col-md-12" label="Username" name="username" required />
-                <x-form-group class="col-sm-12 col-md-12" label="Password" name="password" required />
-                <x-form-group type="select" class="col-sm-12 col-md-12" label="Jenis Kelamin" name="flag_active" required>
+                <x-form-group type="password" class="col-sm-12 col-md-12" label="Password" name="password" required />
+                <x-form-group type="select" class="col-sm-12 col-md-12" label="Status" name="flag_active" required>
                     <option value="" disabled>--Choose Status--</option>
-                    <option value="1">Laki-Laki</option>
-                    <option value="0">Perempuan</option>
+                    <option value="1">Aktif</option>
+                    <option value="0">No Aktif</option>
                 </x-form-group>
             </div>
         </div>
@@ -93,47 +97,11 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 }, {
-                    "data": "kd_peserta",
-                }, {
-                    "data": null,
-                    "className": "text-center",
-                    "render": function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                }, {
                     "data": "nm_peserta",
-                }, {
-                    "data": "Tanggal lahir",
-                    "className": "text-center",
-                    "render": function(data, type, row, meta) {
-                        return Convertyyyymmmddd(data);
-                    }
-                }, {
-                    "data": "tgl_lhr",
-                }, {
-                    "data": null,
-                    "className": "text-center",
-                    "render": function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                }, {
-                    "data": "alamat",
-                }, {
-                    "data": null,
-                    "className": "text-center",
-                    "render": function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
                 }, {
                     "data": "username",
                 }, {
-                    "data": null,
-                    "className": "text-center",
-                    "render": function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                }, {
-                    "data": "password",
+                    "data": "email",
                 }, {
                     "data": "flag_active",
                     render: function(data, type, row, meta) {
@@ -161,10 +129,10 @@
                     $tr = $(this).closest('tr');
                     var data = table.row($tr).data();
                     processData = {
-                        kd_event: data.kd_event,
-                        nm_event: data.nm_event
+                        kd_peserta: data.kd_peserta
                     };
-                    $("#FDelData p").html("Are you sure to delete data Peserta <b>" + data.nm_event + "</b> ?");
+                    $("#FDelData p").html("Are you sure to delete data Peserta <b>" + data.nm_peserta +
+                        "</b> ?");
                     ShowModal("MDelData");
                 });
             } else {
@@ -191,7 +159,6 @@
                 password: (act == "Add" ? "" : data.password),
                 flag_active: (act == "Add" ? "" : data.flag_active),
             };
-            $(form_id + " [name='kd_peserta'']").val(processData.kd_peserta).change();
             $(form_id + " [name='nm_peserta']").val(processData.nm_peserta).change();
             $(form_id + " [name='jns_kel']").val(processData.jns_kel).change();
             $(form_id + " [name='tgl_lhr']").val(processData.tgl_lhr).change();
@@ -209,7 +176,6 @@
             if ($(form_id).parsley().validate()) {
                 Loader("show");
                 // Pass Data To Object
-                processData.kd_peserta = $(form_id + " [name='kd_peserta']").val();
                 processData.nm_peserta = $(form_id + " [name='nm_peserta']").val();
                 processData.jns_kel = $(form_id + " [name='jns_kel']").val();
                 processData.tgl_lhr = $(form_id + " [name='tgl_lhr']").val();
