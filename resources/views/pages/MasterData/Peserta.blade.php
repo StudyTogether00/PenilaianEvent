@@ -18,11 +18,15 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="text-center">No</th>
-                                    <th class="text-center">Kriteria</th>
-                                    <th class="text-center">Tipe</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="disabled-sorting text-center">Actions</th>
+                                    <th class="text-center align-middle" rowspan="2">No</th>
+                                    <th class="text-center align-middle" colspan="3">Data Peserta</th>
+                                    <th class="text-center align-middle" rowspan="2">Status</th>
+                                    <th class="disabled-sorting text-center align-middle" rowspan="2">Actions</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Nama</th>
+                                    <th class="text-center">Username</th>
+                                    <th class="text-center">Email</th>
                                 </tr>
                             </thead>
                         </table>
@@ -36,16 +40,17 @@
     <x-modal-form id="AddEditData" title="labelAddEdit">
         <div class="modal-body">
             <div class="row">
-                <x-form-group class="col-sm-12 col-md-12" label="Kriteria" name="nm_kriteria" required />
-                <x-form-group type="select" class="col-sm-12 col-md-12" label="Tipe" name="tipe" required>
-                    <option value="" disabled>--Choose Tipe--</option>
-                    <option value="1">Benefit</option>
-                    <option value="0">Cost</option>
-                </x-form-group>
-                <x-form-group type="select" class="col-sm-12 col-md-12" label="Status" name="flag_active" required>
+                <x-form-group class="col-sm-12 col-md-12" label="Kode" name="kd_peserta" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Nama Peserta" name="nm_peserta" required />
+                <x-form-group type="date" class="col-sm-12 col-md-12" label="Tanggal Lahir" name="tgl_lhr" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Alamat" name="alamat" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Email" name="email" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Username" name="username" required />
+                <x-form-group class="col-sm-12 col-md-12" label="Password" name="password" required />
+                <x-form-group type="select" class="col-sm-12 col-md-12" label="Jenis Kelamin" name="flag_active" required>
                     <option value="" disabled>--Choose Status--</option>
-                    <option value="1">Aktif</option>
-                    <option value="0">Non Aktif</option>
+                    <option value="1">Laki-Laki</option>
+                    <option value="0">Perempuan</option>
                 </x-form-group>
             </div>
         </div>
@@ -78,7 +83,7 @@
                 let dtu = {
                     id: id_tbl,
                     data: {
-                        url: $apiUrl + "MasterData/Kriteria/List"
+                        url: $apiUrl + "MasterData/Peserta/List"
                     }
                 };
                 table = PDataTables(dtu, [{
@@ -88,16 +93,51 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 }, {
-                    "data": "nm_kriteria",
+                    "data": "kd_peserta",
                 }, {
-                    "data": "tipe",
-                    render: function(data, type, row, meta) {
-                        return data == 1 ? "Benefit" : "Cost";
+                    "data": null,
+                    "className": "text-center",
+                    "render": function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
                     }
+                }, {
+                    "data": "nm_peserta",
+                }, {
+                    "data": "Tanggal lahir",
+                    "className": "text-center",
+                    "render": function(data, type, row, meta) {
+                        return Convertyyyymmmddd(data);
+                    }
+                }, {
+                    "data": "tgl_lhr",
+                }, {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }, {
+                    "data": "alamat",
+                }, {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }, {
+                    "data": "username",
+                }, {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }, {
+                    "data": "password",
                 }, {
                     "data": "flag_active",
                     render: function(data, type, row, meta) {
-                        return data == 1 ? "Aktif" : "Non Aktif";
+                        return data == 1 ? "Laki-Laki" : "Perempuan";
                     }
                 }, {
                     "data": null,
@@ -105,9 +145,9 @@
                     "className": "text-center",
                     render: function(data, type, row, meta) {
                         let html = "";
-                        html += btnDataTable("Edit Kriteria", "btn-outline-primary edit",
+                        html += btnDataTable("Edit Peserta", "btn-outline-primary edit",
                             "fa fa-edit btn-outline-primary", true);
-                        html += btnDataTable("Delete Kriteria", "btn-outline-danger delete",
+                        html += btnDataTable("Delete Peserta", "btn-outline-danger delete",
                             "fa fa-trash btn-outline-danger");
                         return html;
                     }
@@ -121,11 +161,10 @@
                     $tr = $(this).closest('tr');
                     var data = table.row($tr).data();
                     processData = {
-                        kd_kriteria: data.kd_kriteria,
-                        nm_kriteria: data.nm_kriteria
+                        kd_event: data.kd_event,
+                        nm_event: data.nm_event
                     };
-                    $("#FDelData p").html("Are you sure to delete data Kriteria <b>" + data.nm_kriteria +
-                        "</b> ?");
+                    $("#FDelData p").html("Are you sure to delete data Peserta <b>" + data.nm_event + "</b> ?");
                     ShowModal("MDelData");
                 });
             } else {
@@ -139,16 +178,27 @@
 
         ShowData = function(act = "Add", data = "") {
             let form_id = "#FAddEditData";
-            $("h4[labelAddEdit]").text(act + " Data Kriteria");
+            $("h4[labelAddEdit]").text(act + " Data Peserta");
             processData = {
                 action: act,
-                kd_kriteria: (act == "Add" ? 0 : data.kd_kriteria),
-                nm_kriteria: (act == "Add" ? "" : data.nm_kriteria),
-                tipe: (act == "Add" ? "" : data.tipe),
+                kd_peserta: (act == "Add" ? 0 : data.kd_peserta),
+                nm_peserta: (act == "Add" ? "" : data.nm_peserta),
+                jns_kel: (act == "Add" ? "" : data.jns_kel),
+                tgl_lhr: (act == "Add" ? moment(new Date()).format("YYYY-MM-DD") : data.tgl_lhr),
+                alamat: (act == "Add" ? "" : data.alamat),
+                email: (act == "Add" ? "" : data.email),
+                username: (act == "Add" ? "" : data.username),
+                password: (act == "Add" ? "" : data.password),
                 flag_active: (act == "Add" ? "" : data.flag_active),
             };
-            $(form_id + " [name='nm_kriteria']").val(processData.nm_kriteria).change();
-            $(form_id + " [name='tipe']").val(processData.tipe).change();
+            $(form_id + " [name='kd_peserta'']").val(processData.kd_peserta).change();
+            $(form_id + " [name='nm_peserta']").val(processData.nm_peserta).change();
+            $(form_id + " [name='jns_kel']").val(processData.jns_kel).change();
+            $(form_id + " [name='tgl_lhr']").val(processData.tgl_lhr).change();
+            $(form_id + " [name='alamat']").val(processData.alamat).change();
+            $(form_id + " [name='email']").val(processData.email).change();
+            $(form_id + " [name='username']").val(processData.username).change();
+            $(form_id + " [name='password']").val(processData.password).change();
             $(form_id + " [name='flag_active']").val(processData.flag_active).change();
             $(form_id).parsley().reset();
             ShowModal("MAddEditData");
@@ -159,14 +209,21 @@
             if ($(form_id).parsley().validate()) {
                 Loader("show");
                 // Pass Data To Object
-                processData.nm_kriteria = $(form_id + " [name='nm_kriteria']").val();
-                processData.tipe = $(form_id + " [name='tipe']").val();
+                processData.kd_peserta = $(form_id + " [name='kd_peserta']").val();
+                processData.nm_peserta = $(form_id + " [name='nm_peserta']").val();
+                processData.jns_kel = $(form_id + " [name='jns_kel']").val();
+                processData.tgl_lhr = $(form_id + " [name='tgl_lhr']").val();
+                processData.alamat = $(form_id + " [name='alamat']").val();
+                processData.email = $(form_id + " [name='email']").val();
+                processData.username = $(form_id + " [name='username']").val();
+                processData.password = $(form_id + " [name='password']").val();
                 processData.flag_active = $(form_id + " [name='flag_active']").val();
                 //Setup Send Ajax
                 let data = {
-                    url: $apiUrl + "MasterData/Kriteria/Save",
+                    url: $apiUrl + "MasterData/Peserta/Save",
                     param: processData
                 };
+                // Process Ajax
                 SendAjax(data, function(result) {
                     MessageNotif(result.message, "success");
                     Refresh();
@@ -180,7 +237,7 @@
         Delete = function() {
             Loader("show");
             let data = {
-                url: $apiUrl + "MasterData/Kriteria/Delete",
+                url: $apiUrl + "MasterData/Peserta/Delete",
                 param: processData
             };
             SendAjax(data, function(result) {
@@ -194,6 +251,7 @@
 
         $(document).ready(function() {
             Refresh();
+            LoadPicker();
         });
     </script>
 @endpush
