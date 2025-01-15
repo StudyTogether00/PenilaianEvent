@@ -105,4 +105,25 @@ class RegisterController extends BaseController
         }
         return $this->SendResponse();
     }
+
+    public function PesertaReady(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(), ["kd_event" => "required"]);
+            if ($validation->fails()) {
+                $this->error = $validation->errors();
+                throw new \Exception(BaseService::MessageCheckData(), 400);
+            }
+            $data = MstPesertaService::Data();
+            $data = RegisterService::Join($data, $request->kd_event, "mstpeserta.kd_peserta", "re", "leftJoin", "v2");
+            $data = $data->whereNull("re.kd_peserta");
+            $data = $data->select("mstpeserta.kd_peserta", "mstpeserta.nm_peserta");
+            // dd($data->toSql());
+            $data = $data->orderBy("mstpeserta.nm_peserta")->get();
+            $this->respon = BaseService::ResponseSuccess(BaseService::MsgSuccess("Pserta Ready", 1), $data);
+        } catch (\Throwable $th) {
+            $this->respon = BaseService::ResponseError($th->getMessage(), $this->error, $th->getCode());
+        }
+        return $this->SendResponse();
+    }
 }

@@ -102,4 +102,18 @@ class MstEventController extends BaseController
         }
         return $this->SendResponse();
     }
+
+    public function Active(Request $request)
+    {
+        try {
+            $data = MstEventService::Data();
+            $data = $data->select("kd_event", "nm_event");
+            $data = $data->orderBy("nm_event")->get();
+
+            $this->respon = BaseService::ResponseSuccess(BaseService::MsgSuccess("{$this->pns} Active", 1), $data);
+        } catch (\Throwable $th) {
+            $this->respon = BaseService::ResponseError($th->getMessage(), $this->error, $th->getCode());
+        }
+        return $this->SendResponse();
+    }
 }

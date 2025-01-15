@@ -105,7 +105,7 @@
                 }, {
                     "data": "flag_active",
                     render: function(data, type, row, meta) {
-                        return data == 1 ? "Laki-Laki" : "Perempuan";
+                        return data == 1 ? "Aktif" : "Non Aktif";
                     }
                 }, {
                     "data": null,

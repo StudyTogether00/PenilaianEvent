@@ -4,6 +4,7 @@ namespace App\Services\DB;
 
 use App\Models\MasterData\MstPeserta;
 use App\Services\BaseService;
+use Illuminate\Support\Facades\DB;
 
 class MstPesertaService
 {
@@ -16,7 +17,7 @@ class MstPesertaService
     {
         $data = MstPeserta::distinct();
         if (!empty($flag_active) || $flag_active === 0) {
-            $data = $data->where("mstpeserta.flag_active", $flag_active);
+            $data = $data->where("mstpeserta.flag_active", DB::raw("{$flag_active}"));
         }
         return $data;
     }

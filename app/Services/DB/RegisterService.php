@@ -2,7 +2,6 @@
 
 namespace App\Services\DB;
 
-use App\Models\MasterData\MstPeserta;
 use App\Models\Process\RegisterEvent;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\DB;
@@ -41,8 +40,8 @@ class RegisterService
 
     public static function Join($data, $kd_event, $kd_peserta, $alias = "mstpeserta", $type = "join", $versi = "v1")
     {
-        $data = $data->{$type}(with(new MstPeserta)->getTable() . " AS {$alias}", function ($q) use ($alias, $versi, $kd_event, $kd_peserta) {
-            $q->on("{$alias}.kd_event", "=", $kd_event);
+        $data = $data->{$type}(with(new RegisterEvent)->getTable() . " AS {$alias}", function ($q) use ($alias, $versi, $kd_event, $kd_peserta) {
+            $q->on("{$alias}.kd_event", "=", ($versi == "v2" ? DB::raw("{$kd_event}") : $kd_event));
             $q->on("{$alias}.kd_peserta", "=", $kd_peserta);
         });
         return $data;

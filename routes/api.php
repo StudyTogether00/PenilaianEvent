@@ -4,6 +4,7 @@ use App\Http\Controllers\BE\MstData\MstBobotController;
 use App\Http\Controllers\BE\MstData\MstEventController;
 use App\Http\Controllers\BE\MstData\MstKriteriaController;
 use App\Http\Controllers\BE\MstData\MstPesertaController;
+use App\Http\Controllers\BE\Process\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,7 @@ Route::prefix('MasterData')->group(function () {
         Route::post('List', [MstEventController::class, "Lists"]);
         Route::post('Save', [MstEventController::class, "Save"]);
         Route::post('Delete', [MstEventController::class, "Delete"]);
+        Route::post('Active', [MstEventController::class, "Active"]);
     });
     Route::prefix('Kriteria')->group(function () {
         Route::post('List', [MstKriteriaController::class, "Lists"]);
@@ -43,9 +45,10 @@ Route::prefix('MasterData')->group(function () {
 });
 Route::prefix('Process')->group(function () {
     Route::prefix('Register')->group(function () {
-        Route::post('List', [MstPesertaController::class, "Lists"]);
-        Route::post('Save', [MstPesertaController::class, "Save"]);
-        Route::post('Delete', [MstPesertaController::class, "Delete"]);
+        Route::post('List', [RegisterController::class, "Lists"]);
+        Route::post('Save', [RegisterController::class, "Save"]);
+        Route::post('Delete', [RegisterController::class, "Delete"]);
+        Route::post('PesertaReady', [RegisterController::class, "PesertaReady"]);
     });
     Route::prefix('Nilai')->group(function () {
         Route::post('List', [MstPesertaController::class, "Lists"]);
