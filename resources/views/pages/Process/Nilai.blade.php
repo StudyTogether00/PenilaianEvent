@@ -18,8 +18,6 @@
                                 <thead>
                                     <tr>
                                         <th colspan="10">
-                                            <x-button type="button" class="btn-outline-success" icon="fa fa-plus"
-                                                label="Add" onclick="Add()" />
                                             <x-button type="button" class="btn-outline-info" icon="fa fa-refresh"
                                                 label="Refresh" onclick="Refresh()" />
                                         </th>
@@ -100,7 +98,7 @@
                 let dtu = {
                     id: id_tbl,
                     data: {
-                        url: $apiUrl + "Process/Register/List",
+                        url: $apiUrl + "Process/Nilai/List",
                         param: function() {
                             var d = {};
                             d.kd_event = kd_event;
@@ -115,31 +113,31 @@
                         return meta.row /*+ meta.settings._iDisplayStart*/ + 1;
                     }
                 }, {
-                    "data": "no_event",
-                }, {
-                    "data": "tgl_register",
-                    "className": "text-center",
-                    render: function(data, type, row, meta) {
-                        return Convertyyyymmmddd(data);
-                    }
-                }, {
                     "data": "nm_peserta",
                 }, {
-                    "data": "jns_kel",
-                    render: function(data, type, row, meta) {
-                        return data == 1 ? "Laki-Laki" : "Perempuan";
-                    }
+                    "data": "rata",
+                    "className": "text-right",
+                    render: Dec2DataTable
                 }, {
-                    "data": "email",
+                    "data": "setup",
+                    render: function(data, type, row, meta) {
+                        var html = ""
+                        if (data == 0) {
+                            html = "Not Set";
+                        } else {
+                            html = "Done";
+                        }
+                        return html
+                    }
                 }, {
                     "data": null,
                     "orderable": false,
                     "className": "text-center",
                     render: function(data, type, row, meta) {
                         let html = "";
-                        html += btnDataTable("Edit Register", "btn-outline-primary edit",
+                        html += btnDataTable("Set Nilai", "btn-outline-primary edit",
                             "fa fa-edit btn-outline-primary", true);
-                        html += btnDataTable("Delete Register", "btn-outline-danger delete",
+                        html += btnDataTable("Hapus Nilai", "btn-outline-danger delete",
                             "fa fa-trash btn-outline-danger");
                         return html;
                     }

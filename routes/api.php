@@ -4,6 +4,7 @@ use App\Http\Controllers\BE\MstData\MstBobotController;
 use App\Http\Controllers\BE\MstData\MstEventController;
 use App\Http\Controllers\BE\MstData\MstKriteriaController;
 use App\Http\Controllers\BE\MstData\MstPesertaController;
+use App\Http\Controllers\BE\Process\NilaiController;
 use App\Http\Controllers\BE\Process\RegisterController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,8 +52,8 @@ Route::prefix('Process')->group(function () {
         Route::post('PesertaReady', [RegisterController::class, "PesertaReady"]);
     });
     Route::prefix('Nilai')->group(function () {
-        Route::post('List', [MstPesertaController::class, "Lists"]);
-        Route::post('Save', [MstPesertaController::class, "Save"]);
-        Route::post('Delete', [MstPesertaController::class, "Delete"]);
+        Route::post('List', [NilaiController::class, "Lists"]);
+        Route::post('Save', [NilaiController::class, "Save"]);
+        Route::post('Delete', [NilaiController::class, "Delete"]);
     });
 });

@@ -2,23 +2,27 @@
 
 namespace App\Services\DB;
 
+use App\Models\Process\NilaiDetail;
 use App\Models\Process\RegisterEvent;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\DB;
 
-class RegisterService
+class NilaiService
 {
     public static function new ()
     {
-        return new RegisterEvent();
+        return new NilaiDetail();
     }
 
-    public static function Data($kd_event, $list = true)
+    public static function Data($kd_event = "", $list = true)
     {
-        $data = RegisterEvent::where("registerevent.kd_event", DB::raw("{$kd_event}"));
+        $data = NilaiDetail::distinct();
+        if (!empty($kd_event)) {
+            $data = $data->where("nilaidetail.kd_event", DB::raw("{$kd_event}"));
+        }
         if ($list) {
-            $data = MstEventService::Join($data, "registerevent.kd_event", "e");
-            $data = MstPesertaService::Join($data, "registerevent.kd_peserta", "p");
+            $data = MstBobotService::Join($data, "nilaidetail.kd_event", "nilaidetail.kd_kriteria", "b");
+            $data = MstKriteriaService::Join($data, "nilaidetail.kd_kriteria", "k");
         }
         return $data;
     }
@@ -38,7 +42,7 @@ class RegisterService
         return $data;
     }
 
-    public static function Join($data, $kd_event, $kd_peserta, $alias = "registerevent", $type = "join", $versi = "v1")
+    public static function Join($data, $kd_event, $kd_peserta, $alias = "nilaidetail", $type = "join", $versi = "v1")
     {
         $data = $data->{$type}(with(new RegisterEvent)->getTable() . " AS {$alias}", function ($q) use ($alias, $versi, $kd_event, $kd_peserta) {
             $q->on("{$alias}.kd_event", "=", ($versi == "v2" ? DB::raw("{$kd_event}") : $kd_event));
