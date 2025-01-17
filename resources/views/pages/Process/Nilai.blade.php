@@ -42,17 +42,43 @@
     <x-modal-form id="AddEditData" title="labelAddEdit">
         <div class="modal-body">
             <div class="row">
-                <x-form-group class="col-sm-12 col-md-12" label="No Register" name="no_event" required />
-                <x-form-group type="date" class="col-sm-12 col-md-12" label="Tanggal Register" name="tgl_register"
-                    required />
-                <x-form-group type="select" class="col-sm-12 col-md-12" label="Peserta" name="kd_peserta" required>
-                    <option value="" disabled>--Choose Peserta--</option>
-                </x-form-group>
+                <div class="material-datatables col-sm-12">
+                    <table id="tableMaple" class="table table-striped table-no-bordered table-hover" cellspacing="0"
+                        width="100%" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kriteria</th>
+                                <th>Nilai</th>
+                                <th class="disabled-sorting text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="text-left">Rata2 Nilai</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
             <x-button type="button" class="btn-outline-secondary mr-1" label="Close" data-dismiss="modal" />
             <x-button type="submit" class="btn-outline-primary" onclick="Save()">Save</x-button>
+        </div>
+    </x-modal-form>
+    {{-- Add Edit Detail Modal --}}
+    <x-modal-form id="AddEditDataDetail" title="labelAddEdit">
+        <div class="modal-body">
+            <div class="row">
+                <x-form-group class="col-sm-12 col-md-12" label="Nilai" name="nilai" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <x-button type="button" class="btn-outline-secondary mr-1" label="Close" data-dismiss="modal" />
+            <x-button type="submit" class="btn-outline-primary" onclick="SaveDetail()">Save</x-button>
         </div>
     </x-modal-form>
     {{-- Delete Modal --}}
@@ -74,6 +100,7 @@
         let table, id_tbl = "#datatables";
         let processData = {};
         let kd_event = "";
+        let nm_peserta = "";
 
         DataEvent = function() {
             SendAjax({
@@ -152,10 +179,10 @@
                     var data = table.row($tr).data();
                     processData = {
                         kd_event: data.kd_event,
-                        kd_peserta: data.kd_peserta
+                        kd_peserta: data.kd_peserta,
                     };
-                    $("#FDelData p").html("Are you sure to delete data register <b>" + data.nm_peserta +
-                        "</b> ?");
+                    $("#FDelData p").html("Are you sure to delete data nilai peserta <b>" +
+                        data.nm_peserta + "</b> ?");
                     ShowModal("MDelData");
                 });
             } else {
@@ -163,58 +190,121 @@
             }
         }
 
-        Add = function() {
-            if (kd_event == "" || kd_event == null || kd_event == undefined) {
-                MessageNotif("Silahkan Pilih Event Terlebih Dahulu!", "warning");
+        ShowData = function(act = "Add", data = "") {
+            let form_id = "#FAddEditData";
+            nm_peserta = data.nm_peserta;
+            $("h4[labelAddEdit]").text("Data Nilai Peserta (" + nm_peserta + ")");
+            // Get Data Nilai
+            SendAjax({
+                url: $apiUrl + "Process/Nilai/DataNilai",
+                param: {
+                    kd_event: kd_event,
+                    kd_peserta: data.kd_peserta,
+                }
+            }, function(result) {
+                processData = {
+                    kd_event: kd_event,
+                    kd_peserta: data.kd_peserta,
+                    dtnilai: result.data
+                };
+                LoadNilai(processData.dtnilai);
+                $(form_id).parsley().reset();
+                ShowModal("MAddEditData");
+            }, function() {
+                Loader();
+            });
+        }
+
+        LoadNilai = function(data) {
+            if (!$.fn.DataTable.isDataTable("#tableMaple")) {
+                let dtu = {
+                    id: "#tableMaple",
+                    type: "manual",
+                    data: data,
+                    config: {
+                        footerCallback: function(row, data, start, end, display) {
+                            let api = this.api();
+                            // Remove the formatting to get integer data for summation
+                            let intVal = function(i) {
+                                return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 :
+                                    typeof i === 'number' ? i : 0;
+                            };
+
+                            // Total over all pages
+                            let Count = 0;
+                            let RataNilai = api.column(2).data().reduce(function(a, b) {
+                                Count++;
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                            RataNilai = RataNilai / Count;
+                            // Update footer
+                            $(api.column(2).footer()).html(Dec2DataTable.display(RataNilai));
+                        },
+                        bFilter: false,
+                        bPaginate: false,
+                        bLengthChange: false,
+                        bInfo: false,
+                    }
+                };
+                table1 = PDataTables(dtu, [{
+                    "data": null,
+                    "className": "text-center",
+                    "render": function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }, {
+                    "data": "nm_kriteria",
+                }, {
+                    "data": "nilai",
+                    "className": "text-right",
+                    render: Dec2DataTable
+                }, {
+                    "data": null,
+                    "orderable": false,
+                    "className": "text-center",
+                    render: function(data, type, row, meta) {
+                        let html = "";
+                        html += btnDataTable("Edit Nilai", "btn-outline-primary edit",
+                            "fa fa-edit btn-outline-primary");
+                        return html;
+                    }
+                }]);
+                table1.on('click', '.edit', function() {
+                    $tr = $(this).closest('tr');
+                    tridx = table1.row($tr).index();
+                    var data = table1.row($tr).data();
+                    ShowDataDetail("Edit", data);
+                });
             } else {
-                ShowData();
+                $('#tableMaple').DataTable().clear();
+                $('#tableMaple').DataTable().rows.add(data);
+                $('#tableMaple').DataTable().draw();
             }
         }
 
-        ShowData = function(act = "Add", data = "") {
-            let form_id = "#FAddEditData";
-            $("h4[labelAddEdit]").text(act + " Data Register");
-            processData = {
+        ShowDataDetail = function(act = "Add", data = "") {
+            let form_id = "#FAddEditDataDetail";
+            let lbldetail = act + " Nilai Kriteria (" + data.nm_kriteria + ")";
+            $("#MAddEditDataDetail h4[labelAddEdit]").text(lbldetail);
+            dtDetail = {
                 action: act,
-                kd_event: kd_event,
-                no_event: (act == "Add" ? "" : data.no_event),
-                tgl_register: (act == "Add" ? moment(new Date()).format("YYYY-MM-DD") : data.tgl_register),
-                kd_peserta: (act == "Add" ? "" : data.kd_peserta),
+                kd_kriteria: (act == "Add" ? "" : data.kd_kriteria),
+                nm_kriteria: (act == "Add" ? "" : data.nm_kriteria),
+                nilai: (act == "Add" ? "" : data.nilai),
             };
-            $(form_id + " [name='no_event']").val(processData.no_event).change();
-            $(form_id + " [name='tgl_register']").val(processData.tgl_register).change();
-            $(form_id + " [name='kd_peserta']").removeAttr('disabled').find('option:not(:first)').remove().end();
-            if (processData.action == "Add") {
-                Loader("show");
-                // Get Data Peserta Ready
-                SendAjax({
-                    url: $apiUrl + "Process/Register/PesertaReady",
-                    param: {
-                        kd_event: processData.kd_event
-                    }
-                }, function(result) {
-                    let html = "";
-                    $.each(result.data, function(index, value) {
-                        html += '<option value="' + value.kd_peserta + '">' + value.nm_peserta +
-                            '</option>';
-                    });
-                    if (html != "") {
-                        $(html).insertAfter(form_id + " [name = 'kd_peserta'] option:first");
-                        $(form_id + " .selectpicker").selectpicker('refresh');
-                    }
-                    $(form_id + " [name='kd_peserta']").val(processData.kd_peserta).change();
-                    $(form_id).parsley().reset();
-                    ShowModal("MAddEditData");
-                }, function() {
-                    Loader();
-                });
-            } else {
-                let html = '<option value="' + data.kd_peserta + '">' + data.nm_peserta + '</option>';
-                $(html).insertAfter(form_id + " [name = 'kd_peserta'] option:first");
-                $(form_id + " .selectpicker").selectpicker('refresh');
-                $(form_id + " [name='kd_peserta']").attr('disabled', true).val(processData.kd_peserta).change();
-                $(form_id).parsley().reset();
-                ShowModal("MAddEditData");
+            $(form_id + " [name='nilai']").val(dtDetail.nilai).change();
+            $(form_id).parsley().reset();
+            ShowModal("MAddEditDataDetail", undefined, true);
+        }
+
+        SaveDetail = function() {
+            let form_id = "#FAddEditDataDetail";
+            if ($(form_id).parsley().validate()) {
+                if (dtDetail.action == 'Add') {} else {
+                    processData.dtnilai[tridx].nilai = $(form_id + " [name='nilai']").val();
+                    LoadNilai(processData.dtnilai);
+                    ShowModal("MAddEditDataDetail", "hide");
+                }
             }
         }
 
@@ -222,13 +312,9 @@
             let form_id = "#FAddEditData";
             if ($(form_id).parsley().validate()) {
                 Loader("show");
-                // Pass Data To Object
-                processData.no_event = $(form_id + " [name='no_event']").val();
-                processData.tgl_register = $(form_id + " [name='tgl_register']").val();
-                processData.kd_peserta = $(form_id + " [name='kd_peserta']").val();
                 //Setup Send Ajax
                 let data = {
-                    url: $apiUrl + "Process/Register/Save",
+                    url: $apiUrl + "Process/Nilai/Save",
                     param: processData
                 };
                 // Process Ajax
@@ -245,7 +331,7 @@
         Delete = function() {
             Loader("show");
             let data = {
-                url: $apiUrl + "Process/Register/Delete",
+                url: $apiUrl + "Process/Nilai/Delete",
                 param: processData
             };
             SendAjax(data, function(result) {
@@ -260,7 +346,6 @@
         $(document).ready(function() {
             DataEvent();
             Refresh();
-            LoadPicker();
         });
     </script>
 @endpush

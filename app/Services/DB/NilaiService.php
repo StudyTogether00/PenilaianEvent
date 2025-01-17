@@ -3,7 +3,6 @@
 namespace App\Services\DB;
 
 use App\Models\Process\NilaiDetail;
-use App\Models\Process\RegisterEvent;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\DB;
 
@@ -42,11 +41,12 @@ class NilaiService
         return $data;
     }
 
-    public static function Join($data, $kd_event, $kd_peserta, $alias = "nilaidetail", $type = "join", $versi = "v1")
+    public static function Join($data, $kd_event, $kd_kriteria, $kd_peserta, $alias = "nilaidetail", $type = "join", $versi = "v1")
     {
-        $data = $data->{$type}(with(new RegisterEvent)->getTable() . " AS {$alias}", function ($q) use ($alias, $versi, $kd_event, $kd_peserta) {
-            $q->on("{$alias}.kd_event", "=", ($versi == "v2" ? DB::raw("{$kd_event}") : $kd_event));
-            $q->on("{$alias}.kd_peserta", "=", $kd_peserta);
+        $data = $data->{$type}(with(new NilaiDetail)->getTable() . " AS {$alias}", function ($q) use ($alias, $versi, $kd_event, $kd_kriteria, $kd_peserta) {
+            $q->on("{$alias}.kd_event", "=", $kd_event);
+            $q->on("{$alias}.kd_kriteria", "=", $kd_kriteria);
+            $q->on("{$alias}.kd_peserta", "=", ($versi == "v2" ? DB::raw("{$kd_peserta}") : $kd_peserta));
         });
         return $data;
     }

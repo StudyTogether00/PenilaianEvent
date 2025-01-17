@@ -53,6 +53,7 @@ Route::prefix('Process')->group(function () {
     });
     Route::prefix('Nilai')->group(function () {
         Route::post('List', [NilaiController::class, "Lists"]);
+        Route::post('DataNilai', [NilaiController::class, "DataNilai"]);
         Route::post('Save', [NilaiController::class, "Save"]);
         Route::post('Delete', [NilaiController::class, "Delete"]);
     });
