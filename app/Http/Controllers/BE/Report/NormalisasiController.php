@@ -73,7 +73,7 @@ class NormalisasiController extends BaseController
             $data = $data->where("nilaidetail.kd_peserta", $request->kd_peserta);
             $data = $data->select(
                 "nilaidetail.kd_event",
-                "nilaidetail.kd_kriteria", "k.nm_kriteria",
+                "nilaidetail.kd_kriteria", "k.nm_kriteria", "k.tipe",
                 "nilaidetail.kd_peserta", "p.nm_peserta",
                 "nilaidetail.nilai", "b.bobot"
             );

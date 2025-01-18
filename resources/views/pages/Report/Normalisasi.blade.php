@@ -232,7 +232,13 @@
                     "data": null,
                     "className": "text-right",
                     render: function(data, type, row, meta) {
-                        return Dec2DataTable.display(data.nilai / data.maxnilai);
+                        let nilai = 0;
+                        if (data.tipe == 1) {
+                            nilai = Dec2DataTable.display(data.nilai / data.maxnilai);
+                        } else {
+                            nilai = Dec2DataTable.display(data.minnilai / data.nilai);
+                        }
+                        return nilai;
                     }
                 }]);
             } else {
