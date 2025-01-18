@@ -6,6 +6,7 @@ use App\Http\Controllers\BE\MstData\MstKriteriaController;
 use App\Http\Controllers\BE\MstData\MstPesertaController;
 use App\Http\Controllers\BE\Process\NilaiController;
 use App\Http\Controllers\BE\Process\RegisterController;
+use App\Http\Controllers\BE\Report\NormalisasiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,5 +57,11 @@ Route::prefix('Process')->group(function () {
         Route::post('DataNilai', [NilaiController::class, "DataNilai"]);
         Route::post('Save', [NilaiController::class, "Save"]);
         Route::post('Delete', [NilaiController::class, "Delete"]);
+    });
+});
+Route::prefix('Report')->group(function () {
+    Route::prefix('Normalisasi')->group(function () {
+        Route::post('Keputusan', [NormalisasiController::class, "DataKeputusan"]);
+        Route::post('NilaiEvent', [NormalisasiController::class, "DataNilai"]);
     });
 });
