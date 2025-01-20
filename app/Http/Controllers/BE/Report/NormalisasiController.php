@@ -26,8 +26,12 @@ class NormalisasiController extends BaseController
             if (!empty($kd_event)) {
                 // Data Nilai
                 $nilai = NilaiService::Data("", true);
+                $nilai = $nilai->leftJoinSub(NilaiService::MaxMinScore(), "mt", function ($q) {
+                    $q->on("mt.kd_event", "=", "nilaidetail.kd_event");
+                    $q->on("mt.kd_kriteria", "=", "nilaidetail.kd_kriteria");
+                });
                 $nilai = $nilai->select("nilaidetail.kd_event", "nilaidetail.kd_peserta");
-                $nilai = $nilai->selectRaw("SUM(nilaidetail.nilai * b.bobot / 100) AS nilai");
+                $nilai = $nilai->selectRaw("SUM(IF(k.tipe = 1, nilaidetail.nilai/mt.maxnilai, mt.minnilai/nilaidetail.nilai)  * b.bobot) AS nilai");
                 $nilai = $nilai->groupBy("nilaidetail.kd_event", "nilaidetail.kd_peserta");
 
                 $data = RegisterService::Data($request->kd_event);
@@ -58,15 +62,10 @@ class NormalisasiController extends BaseController
                 $this->error = $validation->errors();
                 throw new \Exception(BaseService::MessageCheckData(), 400);
             }
-            // data matrix min and max nilai per Event and Kriteria
-            $dtmatrix = NilaiService::Data("", false);
-            $dtmatrix = $dtmatrix->select("kd_event", "kd_kriteria");
-            $dtmatrix = $dtmatrix->selectRaw("MIN(nilai) AS minnilai, MAX(nilai) AS maxnilai");
-            $dtmatrix = $dtmatrix->groupBy("kd_event", "kd_kriteria");
 
             $data = NilaiService::Data($request->kd_event, true);
             $data = MstPesertaService::Join($data, "nilaidetail.kd_peserta", "p");
-            $data = $data->leftJoinSub($dtmatrix, "mt", function ($q) {
+            $data = $data->leftJoinSub(NilaiService::MaxMinScore(), "mt", function ($q) {
                 $q->on("mt.kd_event", "=", "nilaidetail.kd_event");
                 $q->on("mt.kd_kriteria", "=", "nilaidetail.kd_kriteria");
             });

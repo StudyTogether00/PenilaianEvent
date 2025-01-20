@@ -53,14 +53,16 @@
                             <tr>
                                 <th>No</th>
                                 <th>Kriteria</th>
+                                <th>Tipe</th>
                                 <th>Bobot</th>
+                                <th>Min/Max</th>
                                 <th>Nilai</th>
                                 <th>Matrix</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th colspan="2" class="text-left">Nilai Akhir</th>
+                                <th colspan="4" class="text-left">Nilai Akhir</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -190,20 +192,14 @@
                                     typeof i === 'number' ? i : 0;
                             };
 
-                            console.log(data);
-                            let NilaiAkhir = data.reduce(function(a, b) {
-                                    return intVal(a) + (intVal(b.bobot) / 100 * intVal(b.nilai));
-                                },
-                                0);
                             let NilaiMatrix = data.reduce(function(a, b) {
-                                    return intVal(a) + (intVal(b.bobot) / 100 *
+                                    return intVal(a) + (intVal(b.bobot) *
                                         (intVal(b.nilai) / intVal(b.maxnilai)));
                                 },
                                 0);
 
                             // Update footer
-                            $(api.column(3).footer()).html(Dec2DataTable.display(NilaiAkhir));
-                            $(api.column(4).footer()).html(Dec2DataTable.display(NilaiMatrix));
+                            $(api.column(6).footer()).html(Dec2DataTable.display(NilaiMatrix));
                         },
                         bFilter: false,
                         bPaginate: false,
@@ -216,14 +212,28 @@
                     "data": null,
                     "className": "text-center",
                     "render": function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
+                        return meta.row /*+ meta.settings._iDisplayStart*/ + 1;
                     }
                 }, {
                     "data": "nm_kriteria",
                 }, {
+                    "data": "tipe",
+                    "className": "text-right",
+                    render: function(data, type, row, meta) {
+                        let html = (data == 1 ? "Benefit" : "Cost");
+                        return html;
+                    }
+                }, {
                     "data": "bobot",
                     "className": "text-right",
                     render: Dec2DataTable
+                }, {
+                    "data": null,
+                    "className": "text-right",
+                    render: function(data, type, row, meta) {
+                        let html = (data.type == 1 ? data.maxnilai : data.minnilai);
+                        return Dec2DataTable.display(html);
+                    }
                 }, {
                     "data": "nilai",
                     "className": "text-right",

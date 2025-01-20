@@ -50,4 +50,13 @@ class NilaiService
         });
         return $data;
     }
+
+    public static function MaxMinScore()
+    {
+        $data = NilaiService::Data("", false);
+        $data = $data->select("kd_event", "kd_kriteria");
+        $data = $data->selectRaw("MIN(nilai) AS minnilai, MAX(nilai) AS maxnilai");
+        $data = $data->groupBy("kd_event", "kd_kriteria");
+        return $data;
+    }
 }
