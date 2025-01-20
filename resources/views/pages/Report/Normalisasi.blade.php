@@ -231,7 +231,7 @@
                     "data": null,
                     "className": "text-right",
                     render: function(data, type, row, meta) {
-                        let html = (data.type == 1 ? data.maxnilai : data.minnilai);
+                        let html = (data.tipe == 1 ? data.maxnilai : data.minnilai);
                         return Dec2DataTable.display(html);
                     }
                 }, {
