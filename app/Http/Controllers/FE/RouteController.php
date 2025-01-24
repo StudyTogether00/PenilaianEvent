@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FE;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\BaseService;
+use App\Services\DB\MstPesertaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,19 +62,19 @@ class RouteController extends Controller
                 "flag_active" => 1,
             ])->first();
             if (empty($dtadmin->userid)) {
-                /*$datauser = SiswaService::Data()->where([
-                "nisn" => $request->username,
-                "nisn" => $request->password,
+                $datauser = MstPesertaService::Data()->where([
+                    "username" => $request->username,
+                    "password" => md5($request->password),
                 ])->first();
-                if (empty($datauser->nisn)) {*/
-                throw new \Exception("Username and Password is incorrect !", 400);
-                /*}
-            $data = [
-            "userid" => $datauser->nisn,
-            "username" => $datauser->nisn,
-            "fullname" => $datauser->nama_siswa,
-            "role" => "user",
-            ];*/
+                if (empty($datauser->nisn)) {
+                    throw new \Exception("Username and Password is incorrect !", 400);
+                }
+                $data = [
+                    "userid" => $datauser->kd_peserta,
+                    "username" => $datauser->username,
+                    "fullname" => $datauser->nm_peserta,
+                    "role" => "user",
+                ];
             } else {
                 $data = [
                     "userid" => $dtadmin->userid,
