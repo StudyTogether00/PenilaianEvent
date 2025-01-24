@@ -66,7 +66,7 @@ class RouteController extends Controller
                     "username" => $request->username,
                     "password" => md5($request->password),
                 ])->first();
-                if (empty($datauser->nisn)) {
+                if (empty($datauser->kd_peserta)) {
                     throw new \Exception("Username and Password is incorrect !", 400);
                 }
                 $data = [
