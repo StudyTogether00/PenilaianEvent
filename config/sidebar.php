@@ -29,6 +29,11 @@ return [
                     "title" => "Data Peserta",
                     "url" => "MasterData/Peserta",
                 ],
+                [
+                    "icon" => '<span class="sidebar-mini">DA</span>',
+                    "title" => "Data Admin",
+                    "url" => "MasterData/Admin",
+                ],
             ],
         ], [
             "icon" => '<i class="material-icons">content_copy</i>',
